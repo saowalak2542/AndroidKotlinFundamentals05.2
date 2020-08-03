@@ -57,8 +57,8 @@ class GameFragment : Fragment() {
 
         binding.correctButton.setOnClickListener { onCorrect() }
         binding.skipButton.setOnClickListener { onSkip() }
-        updateScoreText()
         binding.endGameButton.setOnClickListener { onEndGame() }
+        updateScoreText()
         updateWordText()
         return binding.root
 
@@ -68,6 +68,7 @@ class GameFragment : Fragment() {
     /** Methods for button click handlers **/
 
     private fun onSkip() {
+
         viewModel.onSkip()
         updateWordText()
         updateScoreText()
@@ -77,24 +78,28 @@ class GameFragment : Fragment() {
         updateScoreText()
         updateWordText()
     }
+    private fun onEndGame() {
+        gameFinished()
+    }
 
 
     /** Methods for updating the UI **/
 
     private fun updateWordText() {
-        binding.wordText.text = viewModel.word
+        binding.wordText.text = viewModel.word.value
     }
 
     private fun updateScoreText() {
-        binding.scoreText.text = viewModel.score.toString()
+        binding.scoreText.text = viewModel.score.value.toString()
     }
+
     private fun gameFinished() {
         Toast.makeText(activity, "Game has just finished", Toast.LENGTH_SHORT).show()
         val action = GameFragmentDirections.actionGameToScore()
-        action.score = viewModel.score
+        action.score = viewModel.score.value?:0
         NavHostFragment.findNavController(this).navigate(action)
     }
-    private fun onEndGame() {
-        gameFinished()
-    }
+
+
+
 }
